@@ -6,8 +6,14 @@ use PHPUnit\Framework\TestCase;
 use Torn\Client;
 use Torn\Services\AbstractService;
 
+/**
+ * @coversDefaultClass \Torn\Services\AbstractService
+ */
 class AbstractServiceTest extends TestCase
 {
+    /**
+     * @covers ::fetch
+     */
     public function testFetch()
     {
         $resourceName = 'someResource';

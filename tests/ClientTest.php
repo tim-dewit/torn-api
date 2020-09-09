@@ -10,8 +10,14 @@ use Psr\Http\Message\StreamInterface;
 use Torn\Client;
 use Torn\Exceptions\TornException;
 
+/**
+ * @coversDefaultClass \Torn\Client
+ */
 class ClientTest extends TestCase
 {
+    /**
+     * @covers ::makeRequest
+     */
     public function testMakeRequest()
     {
         $resource = 'someResource';
@@ -40,6 +46,9 @@ class ClientTest extends TestCase
         $client->makeRequest($resource, $selections, $apiKey);
     }
 
+    /**
+     * @covers ::makeRequest
+     */
     public function testMakeRequestFallsBackToMasterKey()
     {
         $masterApiKey = 'someKey';
@@ -66,6 +75,9 @@ class ClientTest extends TestCase
         $client->makeRequest('');
     }
 
+    /**
+     * @covers ::makeRequest
+     */
     public function testMakeRequestThrowsException()
     {
         $responsePayload = [
