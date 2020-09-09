@@ -7,7 +7,7 @@ use Torn\Client;
 use Torn\Services\AbstractService;
 
 /**
- * @coversDefaultClass \Torn\Services\AbstractService
+ * @coversDefaultClass AbstractService
  */
 class AbstractServiceTest extends TestCase
 {

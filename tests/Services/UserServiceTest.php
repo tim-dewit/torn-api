@@ -9,7 +9,7 @@ use Torn\Services\UserService;
 use Torn\Services\AbstractService;
 
 /**
- * @coversDefaultClass \Torn\Services\UserService
+ * @coversDefaultClass UserService
  */
 class UserServiceTest extends TestCase
 {

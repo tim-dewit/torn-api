@@ -8,7 +8,7 @@ use Torn\Services\AbstractService;
 use Torn\Services\PropertyService;
 
 /**
- * @coversDefaultClass \Torn\Services\PropertyService
+ * @coversDefaultClass PropertyService
  */
 class PropertyServiceTest extends TestCase
 {

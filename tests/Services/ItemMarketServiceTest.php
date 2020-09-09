@@ -5,12 +5,12 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Torn\Client;
 use Torn\Services\AbstractService;
-use Torn\Services\FactionService;
+use Torn\Services\ItemMarketService;
 
 /**
- * @coversDefaultClass FactionService
+ * @coversDefaultClass ItemMarketService
  */
-class FactionServiceTest extends TestCase
+class ItemMarketServiceTest extends TestCase
 {
     /**
      * @covers ::construct
@@ -18,7 +18,7 @@ class FactionServiceTest extends TestCase
     public function testInheritance()
     {
         $clientMock = $this->createMock(Client::class);
-        $userService = new FactionService($clientMock);
+        $userService = new ItemMarketService($clientMock);
 
         $this->assertInstanceOf(AbstractService::class, $userService);
     }

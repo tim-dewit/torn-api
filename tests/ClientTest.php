@@ -11,7 +11,7 @@ use Torn\Client;
 use Torn\Exceptions\TornException;
 
 /**
- * @coversDefaultClass \Torn\Client
+ * @coversDefaultClass Client
  */
 class ClientTest extends TestCase
 {
