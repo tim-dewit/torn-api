@@ -10,6 +10,8 @@ use Torn\Exceptions\TornException;
 
 abstract class AbstractService
 {
+    const TIMESTAMP = 'timestamp';
+
     /**
      * @var string
      */

@@ -42,7 +42,6 @@ class UserService extends AbstractService
     const REVIVES = 'revives';
     const REVIVES_FULL = 'revives_full';
     const STOCKS = 'stocks';
-    const TIMESTAMP = 'timestamp';
     const TRAVEL = 'travel';
     const WEAPON_EXP = 'weaponexp';
     const WORK_STATS = 'workstats';
@@ -51,6 +50,7 @@ class UserService extends AbstractService
 
     public function isApiKeyValid(string $apiKey): bool
     {
+
         try {
             $this->fetch('', [], $apiKey);
 
