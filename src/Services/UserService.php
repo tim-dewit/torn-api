@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Torn\Fetchers;
 
 use Torn\Exceptions\TornException;
+use Torn\Services\AbstractService;
 
-class UserFetcher extends AbstractFetcher
+class UserService extends AbstractService
 {
     const AMMO = 'ammo';
     const ATTACKS = 'attacks';

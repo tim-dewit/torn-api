@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Torn\Fetchers;
+namespace Torn\Services;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Torn\Client;
-use Torn\Exceptions\InvalidSelectionException;
 use Torn\Exceptions\TornException;
 
-abstract class AbstractFetcher
+abstract class AbstractService
 {
     /**
      * @var string
@@ -30,7 +29,7 @@ abstract class AbstractFetcher
      * @throws GuzzleException
      * @throws TornException
      */
-    public function fetch(string $resourceId, array $selections, string $apiKey = null): array
+    public function fetch(string $resourceId, array $selections = [], string $apiKey = null): array
     {
         $resource = $this->resourceName . '/' . $resourceId;
 
