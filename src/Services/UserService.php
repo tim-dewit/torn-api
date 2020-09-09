@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Torn\Fetchers;
+namespace Torn\Services;
 
-use Torn\Exceptions\TornException;
-use Torn\Services\AbstractService;
+use Torn\Exceptions\ApiKeyException;
 
 class UserService extends AbstractService
 {
@@ -56,7 +55,7 @@ class UserService extends AbstractService
             $this->fetch('', [], $apiKey);
 
             return true;
-        } catch (TornException $exception) {
+        } catch (ApiKeyException $exception) {
             return false;
         }
     }
