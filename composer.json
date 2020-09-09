@@ -1,0 +1,24 @@
+{
+    "name": "pixels/torn-api",
+    "description": "A PHP wrapper around the Torn API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pixels",
+            "email": "theunseenfaction@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Torn\\": "./src"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "7.0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "8"
+    }
+}
