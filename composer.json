@@ -9,6 +9,7 @@
             "email": "theunseenfaction@gmail.com"
         }
     ],
+    "keywords": ["torn"],
     "autoload": {
         "psr-4": {
             "Torn\\": "./src"
