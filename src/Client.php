@@ -13,7 +13,14 @@ class Client
     const TORN_API_BASE_URL = 'https://api.torn.com/';
     const REQUEST_GET = 'GET';
 
+    /**
+     * @var \GuzzleHttp\Client
+     */
     private $httpClient;
+
+    /**
+     * @var string
+     */
     private $masterApiKey;
 
     public function __construct(\GuzzleHttp\Client $httpClient, string $masterApiKey = '')
