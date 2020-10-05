@@ -123,6 +123,10 @@ class ClientTest extends TestCase
         $this->assertTrue($client->shouldUseTornProxy());
     }
 
+    /**
+     * @covers ::__construct
+     * @covers ::shouldUseTornProxy
+     */
     public function testSettingShouldUseTornProxyViaConstructor()
     {
         $httpClientMock = $this->createMock(GuzzleClient::class);
@@ -133,6 +137,36 @@ class ClientTest extends TestCase
         );
 
         $this->assertTrue($client->shouldUseTornProxy());
+    }
+
+    /**
+     * @covers ::makeRequest
+     */
+    public function testMakeRequestAdheresToTheShouldUseTornProxyFlag()
+    {
+        $resource = '';
+        $selections = ['foo', 'bar'];
+        $responseMock = $this->createResponseMock();
+        $httpClientSpy = $this->createMock(GuzzleClient::class);
+        $httpClientSpy->expects($this->once())
+            ->method('request')
+            ->with(
+                $this->anything(),
+                $this->equalTo(Client::TORN_PROXY_BASE_URL),
+                $this->equalTo(
+                    [
+                        'query' =>
+                            [
+                                'selections' => implode(',', $selections),
+                                'key' => self::MASTER_API_KEY,
+                            ]
+                    ]
+                )
+            )
+            ->willReturn($responseMock);
+
+        $client = new Client($httpClientSpy);
+        $client->makeRequest($resource, $selections, self::MASTER_API_KEY, true);
     }
 
     private function createClient(): Client
