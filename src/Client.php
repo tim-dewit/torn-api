@@ -43,8 +43,12 @@ class Client
      * @throws GuzzleException
      * @throws TornException
      */
-    public function makeRequest(string $resource, array $selections = [], string $apiKey = null): array
-    {
+    public function makeRequest(
+        string $resource,
+        array $selections = [],
+        string $apiKey = null,
+        bool $forceUseTornProxy = false
+    ): array {
         if (!$apiKey) {
             $apiKey = $this->masterApiKey;
         }
@@ -53,7 +57,7 @@ class Client
             'selections' => implode(',', $selections),
             'key' => $apiKey,
         ];
-        $url = $this->buildUrl($resource);
+        $url = $this->getBaseUrl($forceUseTornProxy) . $resource;
 
         $response = $this->httpClient->request(
             self::REQUEST_GET,
@@ -69,16 +73,12 @@ class Client
         return $body;
     }
 
-    private function buildUrl(string $resource): string
+    private function getBaseUrl(bool $forceUseTornProxy = false): string
     {
-        $baseUrl = $this->getBaseUrl();
-
-        return $baseUrl . $resource;
-    }
-
-    private function getBaseUrl(): string
-    {
-        if ($this->shouldUseTornProxy()) {
+        if (
+            $this->shouldUseTornProxy()
+            || $forceUseTornProxy
+        ) {
             return self::TORN_PROXY_BASE_URL;
         }
 
