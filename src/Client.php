@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\GuzzleException;
 class Client
 {
     const TORN_API_BASE_URL = 'https://api.torn.com/';
+    const TORN_PROXY_BASE_URL = 'https://torn-proxy.com/';
     const REQUEST_GET = 'GET';
 
     /**
@@ -23,10 +24,19 @@ class Client
      */
     private $masterApiKey;
 
-    public function __construct(\GuzzleHttp\Client $httpClient, string $masterApiKey = '')
-    {
+    /**
+     * @var bool
+     */
+    private $shouldUseTornProxy;
+
+    public function __construct(
+        \GuzzleHttp\Client $httpClient,
+        string $masterApiKey = '',
+        bool $shouldUseTornProxy = false
+    ) {
         $this->httpClient = $httpClient;
         $this->masterApiKey = $masterApiKey;
+        $this->shouldUseTornProxy = $shouldUseTornProxy;
     }
 
     /**
@@ -57,5 +67,15 @@ class Client
         }
 
         return $body;
+    }
+
+    public function shouldUseTornProxy(): bool
+    {
+        return $this->shouldUseTornProxy;
+    }
+
+    public function setShouldUseTornProxy(bool $shouldUseTornProxy)
+    {
+        $this->shouldUseTornProxy = $shouldUseTornProxy;
     }
 }
