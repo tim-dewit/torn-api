@@ -169,6 +169,36 @@ class ClientTest extends TestCase
         $client->makeRequest($resource, $selections);
     }
 
+    /**
+     * @covers ::makeRequest
+     */
+    public function testOverrideUseTornProxyInMakeRequest()
+    {
+        $resource = '';
+        $selections = ['foo', 'bar'];
+        $responseMock = $this->createResponseMock();
+        $httpClientSpy = $this->createMock(GuzzleClient::class);
+        $httpClientSpy->expects($this->once())
+            ->method('request')
+            ->with(
+                $this->anything(),
+                $this->equalTo(Client::TORN_PROXY_BASE_URL),
+                $this->equalTo(
+                    [
+                        'query' =>
+                            [
+                                'selections' => implode(',', $selections),
+                                'key' => self::MASTER_API_KEY,
+                            ]
+                    ]
+                )
+            )
+            ->willReturn($responseMock);
+
+        $client = new Client($httpClientSpy, self::MASTER_API_KEY, false);
+        $client->makeRequest($resource, $selections, self::MASTER_API_KEY, true);
+    }
+
     private function createClient(): Client
     {
         $httpClientMock = $this->createMock(GuzzleClient::class);
