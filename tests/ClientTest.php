@@ -165,8 +165,8 @@ class ClientTest extends TestCase
             )
             ->willReturn($responseMock);
 
-        $client = new Client($httpClientSpy);
-        $client->makeRequest($resource, $selections, self::MASTER_API_KEY, true);
+        $client = new Client($httpClientSpy, self::MASTER_API_KEY, true);
+        $client->makeRequest($resource, $selections);
     }
 
     private function createClient(): Client
