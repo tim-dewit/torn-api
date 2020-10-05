@@ -6,6 +6,8 @@ namespace Torn\Exceptions;
 
 class ExceptionFactory
 {
+    const DEFAULT_EXCEPTION_CLASS = TornException::class;
+
     const EMPTY_KEY_ERROR = 1;
     const INVALID_KEY_ERROR = 2;
     const WRONG_TYPE_ERROR = 3;
@@ -18,6 +20,9 @@ class ExceptionFactory
     const KEY_OWNER_IN_FEDERAL_JAIL_ERROR = 10;
     const KEY_CHANGE_ERROR = 11;
     const KEY_READ_ERROR = 12;
+
+    const TORN_PROXY_INVALID_KEY_ERROR = 1;
+    const TORN_PROXY_REVOKED_KEY_ERROR = 2;
 
     const EXCEPTION_MAP = [
         self::EMPTY_KEY_ERROR => ApiKeyException::class,
@@ -34,12 +39,36 @@ class ExceptionFactory
         self::KEY_READ_ERROR => KeyReadException::class
     ];
 
+    const TORN_PROXY_EXCEPTION_MAP = [
+        self::TORN_PROXY_INVALID_KEY_ERROR => TornProxyInvalidApiKeyException::class,
+        self::TORN_PROXY_REVOKED_KEY_ERROR => TornProxyRevokedApiKeyException::class,
+    ];
+
+    const TORN_PROXY_OVERRIDE_EXCEPTIONS = [
+        self::INVALID_KEY_ERROR
+    ];
+
     public static function fromResponse(array $response): TornException
     {
         $code = $response['error']['code'];
         $message = $response['error']['error'];
-        $exceptionClassName = self::EXCEPTION_MAP[$code] ?? TornException::class;
+        $exceptionMap = self::EXCEPTION_MAP;
+        if (
+            static::isUsingTornProxy($response)
+            && in_array($code, self::TORN_PROXY_OVERRIDE_EXCEPTIONS)
+        ) {
+            $exceptionMap = self::TORN_PROXY_EXCEPTION_MAP;
+            $code = $response['error']['proxy_code'];
+            $message = $response['error']['proxy_error'];
+        }
+
+        $exceptionClassName = $exceptionMap[$code] ?? self::DEFAULT_EXCEPTION_CLASS;
 
         return new $exceptionClassName($message, $code);
+    }
+
+    private static function isUsingTornProxy(array $response): bool
+    {
+        return isset($response['error']['proxy']);
     }
 }
