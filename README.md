@@ -12,9 +12,11 @@ $masterApiKey = 'masterApiKey'; // Used as a fallback if no key is specified in 
 $selections = [\Torn\Services\UserService::BASIC];
 $userId = 'someUserId';
 $userApiKey = 'yourApiKey';
+$useTornProxyByDefault = false;
+$forceTornProxy = true; // Allows you to use Torn Proxy for a specific request
 $httpClient = new GuzzleHttp\Client();
 
-$client = new Torn\Client($httpClient, $masterApiKey);
+$client = new Torn\Client($httpClient, $masterApiKey, $useTornProxyByDefault);
 $userService = new Torn\Services\UserService($client);
-$user = $userService->fetch($userId, $selections, $userApiKey);    
+$user = $userService->fetch($userId, $selections, $userApiKey, $forceTornProxy);
 ```

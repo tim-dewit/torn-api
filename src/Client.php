@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\GuzzleException;
 class Client
 {
     const TORN_API_BASE_URL = 'https://api.torn.com/';
+    const TORN_PROXY_BASE_URL = 'https://torn-proxy.com/';
     const REQUEST_GET = 'GET';
 
     /**
@@ -23,18 +24,31 @@ class Client
      */
     private $masterApiKey;
 
-    public function __construct(\GuzzleHttp\Client $httpClient, string $masterApiKey = '')
-    {
+    /**
+     * @var bool
+     */
+    private $shouldUseTornProxy;
+
+    public function __construct(
+        \GuzzleHttp\Client $httpClient,
+        string $masterApiKey = '',
+        bool $shouldUseTornProxy = false
+    ) {
         $this->httpClient = $httpClient;
         $this->masterApiKey = $masterApiKey;
+        $this->shouldUseTornProxy = $shouldUseTornProxy;
     }
 
     /**
      * @throws GuzzleException
      * @throws TornException
      */
-    public function makeRequest(string $resource, array $selections = [], string $apiKey = null): array
-    {
+    public function makeRequest(
+        string $resource,
+        array $selections = [],
+        string $apiKey = null,
+        bool $forceUseTornProxy = false
+    ): array {
         if (!$apiKey) {
             $apiKey = $this->masterApiKey;
         }
@@ -43,7 +57,7 @@ class Client
             'selections' => implode(',', $selections),
             'key' => $apiKey,
         ];
-        $url = self::TORN_API_BASE_URL . $resource;
+        $url = $this->getBaseUrl($forceUseTornProxy) . $resource;
 
         $response = $this->httpClient->request(
             self::REQUEST_GET,
@@ -57,5 +71,27 @@ class Client
         }
 
         return $body;
+    }
+
+    private function getBaseUrl(bool $forceUseTornProxy = false): string
+    {
+        if (
+            $this->shouldUseTornProxy()
+            || $forceUseTornProxy
+        ) {
+            return self::TORN_PROXY_BASE_URL;
+        }
+
+        return self::TORN_API_BASE_URL;
+    }
+
+    public function shouldUseTornProxy(): bool
+    {
+        return $this->shouldUseTornProxy;
+    }
+
+    public function setShouldUseTornProxy(bool $shouldUseTornProxy)
+    {
+        $this->shouldUseTornProxy = $shouldUseTornProxy;
     }
 }
