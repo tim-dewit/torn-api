@@ -15,6 +15,8 @@ use Torn\Exceptions\TornException;
  */
 class ClientTest extends TestCase
 {
+    const MASTER_API_KEY = 'foo';
+
     /**
      * @covers ::makeRequest
      */
@@ -22,7 +24,6 @@ class ClientTest extends TestCase
     {
         $resource = 'someResource';
         $selections = ['foo', 'bar'];
-        $apiKey = 'someKey';
         $responseMock = $this->createResponseMock();
         $httpClientSpy = $this->createMock(GuzzleClient::class);
         $httpClientSpy->expects($this->once())
@@ -35,7 +36,7 @@ class ClientTest extends TestCase
                         'query' =>
                             [
                                 'selections' => implode(',', $selections),
-                                'key' => $apiKey,
+                                'key' => self::MASTER_API_KEY,
                             ]
                     ]
                 )
@@ -43,7 +44,7 @@ class ClientTest extends TestCase
             ->willReturn($responseMock);
 
         $client = new Client($httpClientSpy);
-        $client->makeRequest($resource, $selections, $apiKey);
+        $client->makeRequest($resource, $selections, self::MASTER_API_KEY);
     }
 
     /**
@@ -51,7 +52,6 @@ class ClientTest extends TestCase
      */
     public function testMakeRequestFallsBackToMasterKey()
     {
-        $masterApiKey = 'someKey';
         $responseMock = $this->createResponseMock();
         $httpClientSpy = $this->createMock(GuzzleClient::class);
         $httpClientSpy->expects($this->once())
@@ -64,14 +64,14 @@ class ClientTest extends TestCase
                         'query' =>
                             [
                                 'selections' => '',
-                                'key' => $masterApiKey,
+                                'key' => self::MASTER_API_KEY,
                             ]
                     ]
                 )
             )
             ->willReturn($responseMock);
 
-        $client = new Client($httpClientSpy, $masterApiKey);
+        $client = new Client($httpClientSpy, self::MASTER_API_KEY);
         $client->makeRequest('');
     }
 
@@ -99,6 +99,48 @@ class ClientTest extends TestCase
 
         $client = new Client($httpClientMock);
         $client->makeRequest('');
+    }
+
+    /**
+     * @covers ::shouldUseTornProxy
+     */
+    public function testShouldUseTornProxyDefaultsToFalse()
+    {
+        $client = $this->createClient();
+
+        $this->assertFalse($client->shouldUseTornProxy());
+    }
+
+    /**
+     * @covers ::shouldUseTornProxy
+     * @covers ::setShouldUseTornProxy
+     */
+    public function testSetShouldUseTornProxy()
+    {
+        $client = $this->createClient();
+        $client->setShouldUseTornProxy(true);
+
+        $this->assertTrue($client->shouldUseTornProxy());
+    }
+
+    public function testSettingShouldUseTornProxyViaConstructor()
+    {
+        $httpClientMock = $this->createMock(GuzzleClient::class);
+        $client = new Client(
+            $httpClientMock,
+            self::MASTER_API_KEY,
+            true
+        );
+
+        $this->assertTrue($client->shouldUseTornProxy());
+    }
+
+    private function createClient(): Client
+    {
+        $httpClientMock = $this->createMock(GuzzleClient::class);
+        $client = new Client($httpClientMock, self::MASTER_API_KEY);
+
+        return $client;
     }
 
     private function createResponseMock(): MockObject
