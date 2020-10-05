@@ -5,6 +5,8 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Torn\Exceptions\ApiDisabledException;
 use Torn\Exceptions\ExceptionFactory;
+use Torn\Exceptions\TornProxyInvalidApiKeyException;
+use Torn\Exceptions\TornProxyRevokedApiKeyException;
 
 /**
  * @coversDefaultClass ExceptionFactory
