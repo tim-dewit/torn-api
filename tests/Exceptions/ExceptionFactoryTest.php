@@ -39,13 +39,11 @@ class ExceptionFactoryTest extends TestCase
     {
         $errorMessage = 'foo';
         $responseData = [
-            'error' => [
-                'code' => ExceptionFactory::INVALID_KEY_ERROR,
-                'error' => 'torn error message',
-                'proxy' => true,
-                'proxy_code' => ExceptionFactory::TORN_PROXY_INVALID_KEY_ERROR,
-                'proxy_error' => $errorMessage,
-            ],
+            'code' => ExceptionFactory::INVALID_KEY_ERROR,
+            'error' => 'torn error message',
+            'proxy' => true,
+            'proxy_code' => ExceptionFactory::TORN_PROXY_INVALID_KEY_ERROR,
+            'proxy_error' => $errorMessage,
         ];
 
         $exception = ExceptionFactory::fromResponse($responseData);
@@ -61,13 +59,11 @@ class ExceptionFactoryTest extends TestCase
     {
         $errorMessage = 'foo';
         $responseData = [
-            'error' => [
-                'code' => ExceptionFactory::INVALID_KEY_ERROR,
-                'error' => 'torn error message',
-                'proxy' => true,
-                'proxy_code' => ExceptionFactory::TORN_PROXY_REVOKED_KEY_ERROR,
-                'proxy_error' => $errorMessage,
-            ],
+            'code' => ExceptionFactory::INVALID_KEY_ERROR,
+            'error' => 'torn error message',
+            'proxy' => true,
+            'proxy_code' => ExceptionFactory::TORN_PROXY_REVOKED_KEY_ERROR,
+            'proxy_error' => $errorMessage,
         ];
 
         $exception = ExceptionFactory::fromResponse($responseData);

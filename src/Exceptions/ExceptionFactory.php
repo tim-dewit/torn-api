@@ -44,22 +44,16 @@ class ExceptionFactory
         self::TORN_PROXY_REVOKED_KEY_ERROR => TornProxyRevokedApiKeyException::class,
     ];
 
-    const TORN_PROXY_OVERRIDE_EXCEPTIONS = [
-        self::INVALID_KEY_ERROR
-    ];
-
     public static function fromResponse(array $response): TornException
     {
-        $code = $response['error']['code'];
-        $message = $response['error']['error'];
-        $exceptionMap = self::EXCEPTION_MAP;
-        if (
-            static::isUsingTornProxy($response)
-            && in_array($code, self::TORN_PROXY_OVERRIDE_EXCEPTIONS)
-        ) {
+        if (static::isUsingTornProxy($response)) {
             $exceptionMap = self::TORN_PROXY_EXCEPTION_MAP;
-            $code = $response['error']['proxy_code'];
-            $message = $response['error']['proxy_error'];
+            $code = $response['proxy_code'];
+            $message = $response['proxy_error'];
+        } else {
+            $code = $response['error']['code'];
+            $message = $response['error']['error'];
+            $exceptionMap = self::EXCEPTION_MAP;
         }
 
         $exceptionClassName = $exceptionMap[$code] ?? self::DEFAULT_EXCEPTION_CLASS;
@@ -69,6 +63,6 @@ class ExceptionFactory
 
     private static function isUsingTornProxy(array $response): bool
     {
-        return isset($response['error']['proxy']);
+        return isset($response['proxy']);
     }
 }
