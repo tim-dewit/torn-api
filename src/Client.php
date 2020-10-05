@@ -53,7 +53,7 @@ class Client
             'selections' => implode(',', $selections),
             'key' => $apiKey,
         ];
-        $url = self::TORN_API_BASE_URL . $resource;
+        $url = $this->buildUrl($resource);
 
         $response = $this->httpClient->request(
             self::REQUEST_GET,
@@ -67,6 +67,22 @@ class Client
         }
 
         return $body;
+    }
+
+    private function buildUrl(string $resource): string
+    {
+        $baseUrl = $this->getBaseUrl();
+
+        return $baseUrl . $resource;
+    }
+
+    private function getBaseUrl(): string
+    {
+        if ($this->shouldUseTornProxy()) {
+            return self::TORN_PROXY_BASE_URL;
+        }
+
+        return self::TORN_API_BASE_URL;
     }
 
     public function shouldUseTornProxy(): bool
