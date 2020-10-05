@@ -172,7 +172,7 @@ class ClientTest extends TestCase
     /**
      * @covers ::makeRequest
      */
-    public function testOverrideUseTornProxyInMakeRequest()
+    public function testForceUseTornProxyInMakeRequest()
     {
         $resource = '';
         $selections = ['foo', 'bar'];
