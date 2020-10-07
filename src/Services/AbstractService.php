@@ -31,10 +31,14 @@ abstract class AbstractService
      * @throws GuzzleException
      * @throws TornException
      */
-    public function fetch(string $resourceId, array $selections = [], string $apiKey = null): array
-    {
+    public function fetch(
+        string $resourceId,
+        array $selections = [],
+        string $apiKey = null,
+        bool $forceUseTornProxy
+    ): array {
         $resource = $this->resourceName . '/' . $resourceId;
 
-        return $this->client->makeRequest($resource, $selections, $apiKey);
+        return $this->client->makeRequest($resource, $selections, $apiKey, $forceUseTornProxy);
     }
 }
