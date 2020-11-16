@@ -35,7 +35,7 @@ abstract class AbstractService
         string $resourceId,
         array $selections = [],
         string $apiKey = null,
-        bool $forceUseTornProxy
+        bool $forceUseTornProxy = false
     ): array {
         $resource = $this->resourceName . '/' . $resourceId;
 
